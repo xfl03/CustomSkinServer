@@ -4,16 +4,15 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 
 public class Config {
-	public String version=CustomSkinServer.CustomSkinServerVersion;
 	public boolean enable=true;
 	public int maxSize=30;//KB
-	
-	public static Config loadConfig0() {
-		Config config=loadConfig();
+	public static Config loadConfig(){
+		Config config=readConfig();
+		CustomSkinServer.logger.debug(CustomSkinServer.GSON.toJson(config));
 		return config;
 	}
 
-	private static Config loadConfig() {
+	private static Config readConfig() {
 		if(!CustomSkinServer.CONFIG_FILE.exists()){
 			return initConfig();
 		}
@@ -27,10 +26,10 @@ public class Config {
 	}
 	private static Config initConfig() {
 		Config config=new Config();
-		writeConfig(config,false);
+		writeConfig(config);
 		return config;
 	}
-	private static void writeConfig(Config config,boolean update){
+	private static void writeConfig(Config config){
 		String json=CustomSkinServer.GSON.toJson(config);
 		if(CustomSkinServer.CONFIG_FILE.exists())
 			CustomSkinServer.CONFIG_FILE.delete();

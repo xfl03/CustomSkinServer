@@ -23,6 +23,8 @@ public class Handler {
 	public static void handle(BasicPlayer player,String message){
 		if(message==null||message.equals(""))
 			return;
+		if(!CustomSkinServer.config.enable)
+			return;
 		BasicMessage parsedMessage=CustomSkinServer.GSON.fromJson(message, BasicMessage.class);
 		BasicHandler handler=handlers.get(parsedMessage.action.toLowerCase());
 		if(handler==null)

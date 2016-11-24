@@ -20,9 +20,11 @@ public class CustomSkinServer {
 	public static final File LOG_FILE=new File(DATA_DIR,"CustomSkinServer.log");
 	public static final File CONFIG_FILE=new File(DATA_DIR,"CustomSkinServer.json");
 	
-	public static final Logger logger=new Logger(LOG_FILE);
 	public static final Gson GSON=new Gson();
-	public static final Config config=Config.loadConfig0();
+	public static final Gson GSON_PRETTY=new GsonBuilder().setPrettyPrinting().create();
+	
+	public static final Logger logger=new Logger(LOG_FILE);
+	public static final Config config=Config.loadConfig();
 	public static final HashMap<String,Profile> profiles=new HashMap<String, Profile>();
 	
 	
