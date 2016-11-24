@@ -12,7 +12,7 @@ import customskinserver.handler.TextureHandler.TextureRequest;
 import customskinserver.profile.Profile;
 
 public class CustomSkinServer {
-	public static final String CustomSkinServerVersion="0.1";
+	public static final String VERSION="${full_version}";
 	public static final String PLUGIN_CHANNEL_NAME="CustomSkinServer";
 	
 	public static final File DATA_DIR=new File("CustomSkinServer");
@@ -21,10 +21,10 @@ public class CustomSkinServer {
 	public static final File CONFIG_FILE=new File(DATA_DIR,"CustomSkinServer.json");
 	
 	public static final Logger logger=new Logger(LOG_FILE);
+	public static final Gson GSON=new Gson();
 	public static final Config config=Config.loadConfig0();
 	public static final HashMap<String,Profile> profiles=new HashMap<String, Profile>();
 	
-	public static final Gson GSON=new Gson();
 	
 	public interface BasicPlayer{
 		public String getUsername();

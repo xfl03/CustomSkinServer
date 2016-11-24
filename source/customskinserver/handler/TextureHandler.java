@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import customskinserver.CustomSkinServer;
 import customskinserver.CustomSkinServer.BasicPlayer;

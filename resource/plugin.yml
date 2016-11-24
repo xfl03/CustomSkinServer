@@ -1,0 +1,6 @@
+name: CustomSkinServer
+main: customskinserver.bukkit.BukkitPlugin
+version: ${full_version}
+author: xfl03
+website: https://github.com/xfl03/CustomSkinServer
+description: Server plugin for minecraft to transport skins.

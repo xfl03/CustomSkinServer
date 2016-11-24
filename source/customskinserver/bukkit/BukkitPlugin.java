@@ -18,7 +18,7 @@ import customskinserver.util.BytesUtil;
 public class BukkitPlugin extends JavaPlugin implements BasicPlugin,Listener,PluginMessageListener {
 	@Override
 	public void onEnable(){
-		CustomSkinServer.logger.debug("CustomSkinServer Enabled");
+		CustomSkinServer.logger.info("CustomSkinServer "+CustomSkinServer.VERSION+" Runs On BukkitAPI.");
 		CustomSkinServer.onLoad(this);
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, CustomSkinServer.PLUGIN_CHANNEL_NAME);
         Bukkit.getMessenger().registerIncomingPluginChannel(this, CustomSkinServer.PLUGIN_CHANNEL_NAME,this);
