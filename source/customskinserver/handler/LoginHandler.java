@@ -28,7 +28,7 @@ public class LoginHandler implements BasicHandler {
 	public static class LoginResponce{
 		public String action="LOGIN";
 		public String type="RESPONCE";
-		public String version=CustomSkinServer.CustomSkinServerVersion;
+		public String version=CustomSkinServer.VERSION;
 		public int maxSize=CustomSkinServer.config.maxSize;
 	}
 }

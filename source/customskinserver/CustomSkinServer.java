@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import customskinserver.handler.TextureHandler;
 import customskinserver.handler.TextureHandler.TextureLoadedCallback;
