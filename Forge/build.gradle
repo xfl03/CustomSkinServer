@@ -1,0 +1,84 @@
+buildscript {
+    repositories {
+        /*maven {
+            name = "fmm"
+            url = "http://forgemavenmirror.sinaapp.com/maven"
+        }*/
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+ext.snapshot = !(rootProject.ext.config.snapshot==""||rootProject.ext.config.snapshot=="0"||rootProject.ext.config.snapshot==0)
+
+archivesBaseName = "CustomSkinServer"
+version = rootProject.ext.config.version + (snapshot?"-SNAPSHOT-"+System.getenv("BUILD_NUMBER"):"")
+group = "customskinserver"
+
+sourceCompatibility = targetCompatibility = "1.6"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.6"
+}
+sourceSets {
+    main {
+        java {
+            srcDir 'MergedSource'//Merge source
+        }
+        resources {
+            srcDir 'resource'
+        }
+    }
+}
+
+minecraft {
+    version = "1.10.2-12.18.2.2099"
+    runDir = "run"
+    
+    mappings = "stable_29"
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+}
+
+task mergeSource {doLast {
+    copy {
+        from '../Common/source'
+        into 'MergedSource'
+        include '**/CustomSkinServer.java'
+        expand([full_version:project.version])
+    }
+    copy {
+        from '../Common/source'
+        into 'MergedSource'
+        exclude '**/CustomSkinServer.java'
+    }
+	copy {
+        from 'source'
+        into 'MergedSource'
+    }
+}}
+sourceMainJava.dependsOn mergeSource
+
+processResources
+{
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+	inputs.property "full_version", project.version
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version, 'full_version':project.version
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+task afterBuild << {
+    //copyBuildFile
+    copy {
+        from 'build/libs'
+        into '../build/libs'
+    }
+}
+build.finalizedBy afterBuild

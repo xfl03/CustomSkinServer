@@ -19,7 +19,7 @@ import customskinserver.CustomSkinServer;
 import customskinserver.CustomSkinServer.BasicPlugin;
 import customskinserver.handler.Handler;
 
-@Plugin(id = "customskinserver", name = "CustomSkinServer", version = "${full_version}",
+@Plugin(id = "customskinserver", name = "CustomSkinServer", version = CustomSkinServer.VERSION,
     description = "Server plugin for minecraft to transport skins.",
     url = "https://github.com/xfl03/CustomSkinServer",
     authors = {"xfl03"})

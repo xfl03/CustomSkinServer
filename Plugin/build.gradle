@@ -1,0 +1,77 @@
+apply plugin: 'java'
+ext.snapshot = !(rootProject.ext.config.snapshot==""||rootProject.ext.config.snapshot=="0"||rootProject.ext.config.snapshot==0)
+
+archivesBaseName = "CustomSkinServer"
+version = rootProject.ext.config.version + (snapshot?"-SNAPSHOT-"+System.getenv("BUILD_NUMBER"):"")
+group = "customskinserver"
+repositories {
+    /*maven{
+        name = 'aliyun'
+        url = 'http://maven.aliyun.com/nexus/content/repositories/central/'
+	}*/
+    mavenCentral()
+    maven {
+        name = 'sponge'
+        url = 'http://repo.spongepowered.org/maven'
+    }
+	maven {
+        name = 'spigot'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/public/'
+    }
+}
+
+sourceCompatibility = targetCompatibility = "1.6"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.6"
+}
+sourceSets {
+    main {
+        java {
+            srcDir 'MergedSource'
+        }
+        resources {
+            srcDir 'resource'
+        }
+    }
+}
+
+dependencies {
+    compile 'org.spongepowered:spongeapi:5.0.0'
+	compile 'org.bukkit:bukkit:1.10.2-R0.1-SNAPSHOT'
+	
+	compile 'org.apache.commons:commons-lang3:3.3.2'
+	compile 'commons-codec:commons-codec:1.9'
+	compile 'commons-io:commons-io:2.4'
+}
+
+task mergeSource {doLast {
+    copy {
+        from '../Common/source'
+        into 'MergedSource'
+        include '**/CustomSkinServer.java'
+        expand([full_version:project.version])
+    }
+    copy {
+        from '../Common/source'
+        into 'MergedSource'
+        exclude '**/CustomSkinServer.java'
+    }
+	copy {
+        from 'source'
+        into 'MergedSource'
+    }
+}}
+compileJava.dependsOn mergeSource
+
+processResources{
+    expand([full_version:project.version])
+}
+
+task afterBuild << {
+    //copyBuildFile
+    copy {
+        from 'build/libs'
+        into '../build/libs'
+    }
+}
+build.finalizedBy afterBuild

@@ -1,3 +1,16 @@
+# Gradle & Eclipse
+.classpath
+.project
+.gradle/
+
+/bin/
+
+/.settings/
+build/
+MergedSource/
+*.log
+
+# Java
 *.class
 
 # Mobile Tools for Java (J2ME)

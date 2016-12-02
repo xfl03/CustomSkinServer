@@ -1,64 +1,7 @@
-apply plugin: 'java'
-
+apply plugin: 'base'
 ext.configFile = file "build.properties"
 configFile.withReader {
     def prop = new Properties()
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
-}
-ext.snapshot = !(config.snapshot==""||config.snapshot=="0"||config.snapshot==0)
-
-archivesBaseName = "CustomSkinServer"
-version = config.version + (snapshot?"-SNAPSHOT-"+System.getenv("BUILD_NUMBER"):"")
-repositories {
-    mavenCentral()
-    maven {
-        name = 'sponge'
-        url = 'http://repo.spongepowered.org/maven'
-    }
-	maven {
-        name = 'spigot'
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/public/'
-    }
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir 'src'//Moved from Source
-        }
-        resources {
-            srcDir 'resource'
-        }
-    }
-}
-
-dependencies {
-    compile 'org.spongepowered:spongeapi:5.0.0'
-	compile 'org.bukkit:bukkit:1.10.2-R0.1-SNAPSHOT'
-	compile 'org.apache.commons:commons-lang3:3.3.2'
-	compile 'commons-codec:commons-codec:1.9'
-	compile 'commons-io:commons-io:2.4'
-}
-
-task copySource {doLast {
-    copy {
-        from 'source'
-        into 'src'
-        include '**/SpongePlugin.java'
-        include '**/CustomSkinServer.java'
-        expand([full_version:project.version])
-    }
-    copy {
-        from 'source'
-        into 'src'
-        exclude '**/SpongePlugin.java'
-        exclude '**/CustomSkinServer.java'
-    }
-	
-}}
-compileJava.dependsOn copySource
-
-processResources{
-    expand([full_version:project.version])
 }

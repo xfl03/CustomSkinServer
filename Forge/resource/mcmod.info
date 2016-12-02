@@ -1,0 +1,12 @@
+[
+{
+  "modid": "customskinserver",
+  "name": "CustomSkinServer",
+  "description": "Server plugin for minecraft to transport skins.",
+  "version": "${full_version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/xfl03/CustomSkinServer",
+  "authorList": ["xfl03"],
+  "credits": "GPLv3"
+}
+]
