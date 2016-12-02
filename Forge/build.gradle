@@ -75,10 +75,17 @@ processResources
 }
 
 task afterBuild << {
+    //renameBuildFile
+    def file0 = file("build/libs/${archivesBaseName}-${version}.jar")
+    def file1 = file("build/libs/${archivesBaseName}-${version}-forge.jar")
+    file0.renameTo(file1)
+
     //copyBuildFile
     copy {
         from 'build/libs'
         into '../build/libs'
+        include '**/*.jar'
+        exclude '**/*-sources.jar'
     }
 }
 build.finalizedBy afterBuild
