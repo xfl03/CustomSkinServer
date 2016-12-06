@@ -14,7 +14,6 @@ public class BukkitPlayer implements BasicPlayer {
 		this.plugin=plugin;
 		this.player=player;
 	}
-
 	@Override
 	public String getUsername() {
 		return player.getName();

@@ -5,10 +5,10 @@ archivesBaseName = "CustomSkinServer"
 version = rootProject.ext.config.version + (snapshot?"-SNAPSHOT-"+System.getenv("BUILD_NUMBER"):"")
 group = "customskinserver"
 repositories {
-    /*maven{
+    maven{
         name = 'aliyun'
         url = 'http://maven.aliyun.com/nexus/content/repositories/central/'
-	}*/
+    }
     mavenCentral()
     maven {
         name = 'sponge'
@@ -73,5 +73,9 @@ task afterBuild << {
         from 'build/libs'
         into '../build/libs'
     }
+    
+    //Remove Merged Source
+    def mergedSource = file("MergedSource")
+    mergedSource.deleteDir()
 }
 build.finalizedBy afterBuild

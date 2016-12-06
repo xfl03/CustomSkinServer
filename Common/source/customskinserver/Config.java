@@ -5,7 +5,9 @@ import org.apache.commons.io.FileUtils;
 
 public class Config {
 	public boolean enable=true;
-	public int maxSize=30;//KB
+	public int textureMaxSize=30;//KB
+	public int updateTimeLimit=10;//s
+	
 	public static Config loadConfig(){
 		Config config=readConfig();
 		CustomSkinServer.logger.debug(CustomSkinServer.GSON.toJson(config));

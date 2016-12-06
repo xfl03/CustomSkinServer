@@ -45,6 +45,6 @@ public class BukkitPlugin extends JavaPlugin implements BasicPlugin,Listener,Plu
 	}
 	
 	public void onPlayerQuit(PlayerQuitEvent event){
-		CustomSkinServer.removeProfile(event.getPlayer().getName());
+		CustomSkinServer.removeProfileAndBroadcast(event.getPlayer().getName());
 	}
 }

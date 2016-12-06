@@ -13,7 +13,10 @@ public class Handler {
 	public static HashMap<String,BasicHandler> handlers;
 	static{
 		handlers=new HashMap<String,BasicHandler>();
-		//TODO add handlers here
+		
+		handlers.put("login", new LoginHandler());
+		handlers.put("texture", new TextureHandler());
+		handlers.put("update", new UpdateHandler());
 	}
 	public static class BasicMessage{
 		public String action;

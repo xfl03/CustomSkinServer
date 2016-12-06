@@ -46,7 +46,7 @@ public class SpongePlugin implements BasicPlugin {
 	
 	@Listener
 	public void onPlayerQuit(ClientConnectionEvent.Disconnect event){
-		CustomSkinServer.removeProfile(event.getTargetEntity().getName());
+		CustomSkinServer.removeProfileAndBroadcast(event.getTargetEntity().getName());
 	}
 	
 	public static class Message implements org.spongepowered.api.network.Message{

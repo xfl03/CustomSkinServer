@@ -39,7 +39,7 @@ public class ForgeMod implements BasicPlugin {
 	}
 	@SubscribeEvent
 	public void onPlayerQuit(PlayerEvent.PlayerLoggedOutEvent event){
-		CustomSkinServer.removeProfile(event.player.getName());
+		CustomSkinServer.removeProfileAndBroadcast(event.player.getName());
 	}
 	
 	public static class Message implements IMessage{

@@ -7,14 +7,16 @@ import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import customskinserver.handler.RemoveHandler.RemoveRequest;
 import customskinserver.handler.TextureHandler;
 import customskinserver.handler.TextureHandler.TextureLoadedCallback;
 import customskinserver.handler.TextureHandler.TextureRequest;
+import customskinserver.handler.UpdateHandler.UpdateRequest;
 import customskinserver.profile.Profile;
 
 public class CustomSkinServer {
 	public static final String VERSION="${full_version}";
-	public static final String PLUGIN_CHANNEL_NAME="CustomSkinServer";
+	public static final String PLUGIN_CHANNEL_NAME="ServerProfile";
 	
 	public static final File DATA_DIR=new File("CustomSkinServer");
 	public static final File TEXTURE_DIR=new File(DATA_DIR,"textures");
@@ -66,10 +68,18 @@ public class CustomSkinServer {
 	public static void putProfile(String username,Profile profile){
 		profiles.put(username.toLowerCase(), profile);
 	}
+	public static void putProfileAndBroadcast(String username,Profile profile){
+		putProfile(username,profile);
+		sendToAll(CustomSkinServer.GSON.toJson(new UpdateRequest(profile)));
+	}
 	public static Profile getProfile(String username){
 		return profiles.get(username.toLowerCase());
 	}
 	public static void removeProfile(String username){
 		profiles.remove(username.toLowerCase());
+	}
+	public static void removeProfileAndBroadcast(String username){
+		removeProfile(username);
+		sendToAll(CustomSkinServer.GSON.toJson(new RemoveRequest(username)));
 	}
 }

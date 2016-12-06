@@ -6,7 +6,7 @@ import customskinserver.handler.Handler.BasicHandler;
 import customskinserver.profile.Profile;
 import customskinserver.profile.ProfileTextureLoader;
 
-public class UpdateHandlers implements BasicHandler {
+public class UpdateHandler implements BasicHandler {
 
 	@Override
 	public void handleRequest(BasicPlayer player, String message) {
@@ -19,6 +19,8 @@ public class UpdateHandlers implements BasicHandler {
 		//No responce
 	}
 	public static class UpdateRequest{
+		public String action="UPDATE";
+		public String type="REQUEST";
 		public Profile profile;
 		public UpdateRequest(Profile profile){
 			this.profile=profile;

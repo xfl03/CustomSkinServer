@@ -1,9 +1,9 @@
 buildscript {
     repositories {
-        /*maven {
+        maven {
             name = "fmm"
             url = "http://forgemavenmirror.sinaapp.com/maven"
-        }*/
+        }
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
     }
@@ -53,7 +53,7 @@ task mergeSource {doLast {
         into 'MergedSource'
         exclude '**/CustomSkinServer.java'
     }
-	copy {
+    copy {
         from 'source'
         into 'MergedSource'
     }
@@ -64,7 +64,7 @@ processResources
 {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
-	inputs.property "full_version", project.version
+    inputs.property "full_version", project.version
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
         expand 'version':project.version, 'mcversion':project.minecraft.version, 'full_version':project.version
@@ -87,5 +87,9 @@ task afterBuild << {
         include '**/*.jar'
         exclude '**/*-sources.jar'
     }
+    
+    //Remove Merged Source
+    def mergedSource = file("MergedSource")
+    mergedSource.deleteDir()
 }
 build.finalizedBy afterBuild

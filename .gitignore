@@ -3,12 +3,14 @@
 .project
 .gradle/
 
-/bin/
+bin/
 
-/.settings/
+.settings/
 build/
 MergedSource/
 *.log
+.gitignore
+!/.gitignore
 
 # Java
 *.class

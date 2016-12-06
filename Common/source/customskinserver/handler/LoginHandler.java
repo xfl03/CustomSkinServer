@@ -1,5 +1,8 @@
 package customskinserver.handler;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import customskinserver.CustomSkinServer;
 import customskinserver.CustomSkinServer.BasicPlayer;
 import customskinserver.handler.Handler.BasicHandler;
@@ -11,7 +14,7 @@ public class LoginHandler implements BasicHandler {
 	@Override
 	public void handleRequest(BasicPlayer player, String message) {
 		LoginRequest request=CustomSkinServer.GSON.fromJson(message, LoginRequest.class);
-		ProfileTextureLoader.load(player, request.profile);
+		ProfileTextureLoader.update(player, request.profile);
 		LoginResponce responce=new LoginResponce();
 		player.sendPluginMessage(CustomSkinServer.GSON.toJson(responce));
 	}
@@ -23,12 +26,25 @@ public class LoginHandler implements BasicHandler {
 
 	public static class LoginRequest{
 		public Profile profile;
-		public String version;//CustomSkinLoader Version
+		public ClientInfo clientInfo;
+	}
+	public static class ClientInfo{
+		public String version;//Client Mod Version
 	}
 	public static class LoginResponce{
 		public String action="LOGIN";
 		public String type="RESPONCE";
-		public String version=CustomSkinServer.VERSION;
-		public int maxSize=CustomSkinServer.config.maxSize;
+		public ArrayList<Profile> profiles=new ArrayList<Profile>();
+		public ServerInfo serverInfo=new ServerInfo();
+		public LoginResponce(){
+			for(Map.Entry<String,Profile> entry:CustomSkinServer.profiles.entrySet()){
+				profiles.add(entry.getValue());
+			}
+		}
+	}
+	public static class ServerInfo{
+		public String version="CustomSkinServer "+CustomSkinServer.VERSION;
+		public int textureMaxSize=CustomSkinServer.config.textureMaxSize;
+		public int updateTimeLimit=CustomSkinServer.config.updateTimeLimit;
 	}
 }

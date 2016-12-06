@@ -64,7 +64,7 @@ public class TextureHandler implements BasicHandler {
 			callFailed(responce.hash);
 			return;
 		}
-		if(TRUNK_LENGTH*(responce.trunkTot-1)>=CustomSkinServer.config.maxSize*1024){
+		if(TRUNK_LENGTH*(responce.trunkTot-1)>=CustomSkinServer.config.textureMaxSize*1024){
 			callFailed(responce.hash);
 			return;
 		}
