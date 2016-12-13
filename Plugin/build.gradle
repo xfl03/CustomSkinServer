@@ -44,7 +44,18 @@ dependencies {
 	compile 'commons-io:commons-io:2.4'
 }
 
+task cleanMergedSource{doLast {
+    //Remove Merged Source
+    def mergedSource = file("MergedSource")
+    mergedSource.deleteDir()
+}}
+clean.finalizedBy cleanMergedSource
+
 task mergeSource {doLast {
+    //Remove Merged Source
+    def mergedSource = file("MergedSource")
+    mergedSource.deleteDir()
+
     copy {
         from '../Common/source'
         into 'MergedSource'

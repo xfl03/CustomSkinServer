@@ -41,6 +41,13 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
+task cleanMergedSource{doLast {
+    //Remove Merged Source
+    def mergedSource = file("MergedSource")
+    mergedSource.deleteDir()
+}}
+clean.finalizedBy cleanMergedSource
+
 task mergeSource {doLast {
     copy {
         from '../Common/source'
@@ -87,9 +94,5 @@ task afterBuild << {
         include '**/*.jar'
         exclude '**/*-sources.jar'
     }
-    
-    //Remove Merged Source
-    def mergedSource = file("MergedSource")
-    mergedSource.deleteDir()
 }
 build.finalizedBy afterBuild
