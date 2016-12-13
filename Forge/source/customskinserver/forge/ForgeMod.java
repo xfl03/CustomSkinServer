@@ -4,7 +4,6 @@ import java.util.Set;
 
 import customskinserver.CustomSkinServer;
 import customskinserver.CustomSkinServer.BasicPlugin;
-import customskinserver.handler.Handler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,7 +38,7 @@ public class ForgeMod implements BasicPlugin {
 	}
 	@SubscribeEvent
 	public void onPlayerQuit(PlayerEvent.PlayerLoggedOutEvent event){
-		CustomSkinServer.removeProfileAndBroadcast(event.player.getName());
+		CustomSkinServer.onPlayerQuit(event.player.getName());
 	}
 	
 	public static class Message implements IMessage{
@@ -65,8 +64,7 @@ public class ForgeMod implements BasicPlugin {
 		@Override
 		public Message onMessage(Message message, MessageContext ctx) {
 			EntityPlayerMP p=ctx.getServerHandler().playerEntity;
-			CustomSkinServer.logger.debug("[CustomSkinServer] Message Received From "+p.getName()+" : "+message.text);
-			Handler.handle(new ForgePlayer(p),message.text);
+			CustomSkinServer.onPluginMessage(new ForgePlayer(p),message.text);
 			return null;
 		}
 		

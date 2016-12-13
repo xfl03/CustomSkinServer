@@ -12,7 +12,6 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import customskinserver.CustomSkinServer;
 import customskinserver.CustomSkinServer.BasicPlugin;
-import customskinserver.handler.Handler;
 import customskinserver.util.BytesUtil;
 
 public class BukkitPlugin extends JavaPlugin implements BasicPlugin,Listener,PluginMessageListener {
@@ -40,11 +39,10 @@ public class BukkitPlugin extends JavaPlugin implements BasicPlugin,Listener,Plu
 		if(!channel.equalsIgnoreCase(CustomSkinServer.PLUGIN_CHANNEL_NAME))
 			return;
 		String m=BytesUtil.fromBytes(message);
-		CustomSkinServer.logger.debug("[CustomSkinServer] Message Received From "+player.getName()+" : "+m);
-		Handler.handle(new BukkitPlayer(this,player), m);
+		CustomSkinServer.onPluginMessage(new BukkitPlayer(this,player), m);
 	}
 	
 	public void onPlayerQuit(PlayerQuitEvent event){
-		CustomSkinServer.removeProfileAndBroadcast(event.getPlayer().getName());
+		CustomSkinServer.onPlayerQuit(event.getPlayer().getName());
 	}
 }

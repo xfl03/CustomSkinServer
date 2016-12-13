@@ -17,7 +17,6 @@ import org.spongepowered.api.plugin.Plugin;
 
 import customskinserver.CustomSkinServer;
 import customskinserver.CustomSkinServer.BasicPlugin;
-import customskinserver.handler.Handler;
 
 @Plugin(id = "customskinserver", name = "CustomSkinServer", version = CustomSkinServer.VERSION,
     description = "Server plugin for minecraft to transport skins.",
@@ -46,7 +45,7 @@ public class SpongePlugin implements BasicPlugin {
 	
 	@Listener
 	public void onPlayerQuit(ClientConnectionEvent.Disconnect event){
-		CustomSkinServer.removeProfileAndBroadcast(event.getTargetEntity().getName());
+		CustomSkinServer.onPlayerQuit(event.getTargetEntity().getName());
 	}
 	
 	public static class Message implements org.spongepowered.api.network.Message{
@@ -76,8 +75,7 @@ public class SpongePlugin implements BasicPlugin {
 			}
 			PlayerConnection pc=(PlayerConnection) connection;
 			Player p=pc.getPlayer();
-			CustomSkinServer.logger.debug("[CustomSkinServer] Message Received From "+p.getName()+" : "+message.text);
-			Handler.handle(new SpongePlayer(p),message.text);
+			CustomSkinServer.onPluginMessage(new SpongePlayer(p),message.text);
 		}
 		
     }

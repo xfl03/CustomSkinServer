@@ -12,28 +12,30 @@ import org.apache.commons.lang3.ArrayUtils;
 import customskinserver.CustomSkinServer;
 import customskinserver.CustomSkinServer.BasicPlayer;
 import customskinserver.handler.Handler.BasicHandler;
+import customskinserver.handler.Handler.RequestHandler;
+import customskinserver.handler.Handler.ResponceHandler;
 
-public class TextureHandler implements BasicHandler {
+public class TextureHandler implements BasicHandler,RequestHandler,ResponceHandler {
 	public static final int TRUNK_LENGTH=30*1024;//30KB
 
 	@Override
 	public void handleRequest(BasicPlayer player, String message) {
 		TextureRequest request=CustomSkinServer.GSON.fromJson(message, TextureRequest.class);
-		if(!CustomSkinServer.textureExists(request.hash)){
+		if(!CustomSkinServer.textureManager.textureExists(request.hash)){
 			player.sendPluginMessage(CustomSkinServer.GSON.toJson(new TextureResponce(request.hash)));
 			return;
 		}
-		File textureFile=CustomSkinServer.getTextureFile(request.hash);
+		File textureFile=CustomSkinServer.textureManager.getTextureFile(request.hash);
 		try {
 			byte[] bytes=FileUtils.readFileToByteArray(textureFile);
 			if(bytes.length<=TRUNK_LENGTH){
-				player.sendPluginMessage(CustomSkinServer.GSON.toJson(new TextureResponce(request.hash,1,1,Base64.encodeBase64String(bytes))));
+				player.sendPluginMessage(CustomSkinServer.GSON.toJson(new TextureResponce(request.hash,bytes.length,1,1,Base64.encodeBase64String(bytes))));
 				return;
 			}
 			int total=(int) Math.ceil(bytes.length/TRUNK_LENGTH);
 			for(int i=1;i<=total;i++){
 				byte[] splitBytes=ArrayUtils.subarray(bytes, (i-1)*TRUNK_LENGTH, Math.min(TRUNK_LENGTH*i, bytes.length));
-				player.sendPluginMessage(CustomSkinServer.GSON.toJson(new TextureResponce(request.hash,i,total,Base64.encodeBase64String(splitBytes))));
+				player.sendPluginMessage(CustomSkinServer.GSON.toJson(new TextureResponce(request.hash,bytes.length,i,total,Base64.encodeBase64String(splitBytes))));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -44,15 +46,22 @@ public class TextureHandler implements BasicHandler {
 	@Override
 	public void handleResponce(BasicPlayer player, String message){
 		TextureResponce responce=CustomSkinServer.GSON.fromJson(message, TextureResponce.class);
+		//No chunk
 		if(responce.trunkTot==0){
 			callFailed(responce.hash);
 			return;
 		}
-		if(CustomSkinServer.textureExists(responce.hash)){
+		//Texture existed
+		if(CustomSkinServer.textureManager.textureExists(responce.hash)){
 			callSuccess(responce.hash);
 			return;
 		}
-		File textureFile=CustomSkinServer.getTextureFile(responce.hash);
+		//Texture too large
+		if(responce.size>CustomSkinServer.config.textureMaxSize*1024){
+			callFailed(responce.hash);
+			return;
+		}
+		File textureFile=CustomSkinServer.textureManager.getTextureFile(responce.hash);
 		try{
 			if(responce.trunkTot==1){
 				FileUtils.writeByteArrayToFile(textureFile, Base64.decodeBase64(responce.content));
@@ -64,10 +73,7 @@ public class TextureHandler implements BasicHandler {
 			callFailed(responce.hash);
 			return;
 		}
-		if(TRUNK_LENGTH*(responce.trunkTot-1)>=CustomSkinServer.config.textureMaxSize*1024){
-			callFailed(responce.hash);
-			return;
-		}
+		
 		if(!trunks.containsKey(responce.hash))
 			trunks.put(responce.hash, new ArrayList<String>());
 		ArrayList<String> currentTrunks=trunks.get(responce.hash);
@@ -78,7 +84,8 @@ public class TextureHandler implements BasicHandler {
 		for(int i=1;i<=responce.trunkTot;i++){
 			ArrayUtils.addAll(bytes, Base64.decodeBase64(currentTrunks.get(i)));
 		}
-		if(bytes.length>TRUNK_LENGTH){
+		//Size not match
+		if(bytes.length!=responce.size){
 			callFailed(responce.hash);
 			return;
 		}
@@ -118,6 +125,8 @@ public class TextureHandler implements BasicHandler {
 		public String action="TEXTURE";
 		public String type="RESPONCE";
 		public String hash;
+		public int size;
+		
 		public int trunkNum;
 		public int trunkTot=0;//0-Failed
 		public String content;//Base64
@@ -125,8 +134,9 @@ public class TextureHandler implements BasicHandler {
 		public TextureResponce(String hash){//For failed
 			this.hash=hash;
 		}
-		public TextureResponce(String hash,int num,int tot,String content){
+		public TextureResponce(String hash,int size,int num,int tot,String content){
 			this.hash=hash;
+			this.size=size;
 			this.trunkNum=num;
 			this.trunkTot=num;
 			this.content=content;

@@ -4,7 +4,6 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 
 public class Config {
-	public boolean enable=true;
 	public int textureMaxSize=30;//KB
 	public int updateTimeLimit=10;//s
 	

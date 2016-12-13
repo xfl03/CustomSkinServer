@@ -6,10 +6,11 @@ import java.util.Map;
 import customskinserver.CustomSkinServer;
 import customskinserver.CustomSkinServer.BasicPlayer;
 import customskinserver.handler.Handler.BasicHandler;
+import customskinserver.handler.Handler.RequestHandler;
 import customskinserver.profile.Profile;
-import customskinserver.profile.ProfileTextureLoader;
+import customskinserver.texture.ProfileTextureLoader;
 
-public class LoginHandler implements BasicHandler {
+public class LoginHandler implements BasicHandler,RequestHandler {
 
 	@Override
 	public void handleRequest(BasicPlayer player, String message) {
@@ -17,11 +18,6 @@ public class LoginHandler implements BasicHandler {
 		ProfileTextureLoader.update(player, request.profile);
 		LoginResponce responce=new LoginResponce();
 		player.sendPluginMessage(CustomSkinServer.GSON.toJson(responce));
-	}
-
-	@Override
-	public void handleResponce(BasicPlayer player, String message) {
-		//No responce
 	}
 
 	public static class LoginRequest{
@@ -37,7 +33,7 @@ public class LoginHandler implements BasicHandler {
 		public ArrayList<Profile> profiles=new ArrayList<Profile>();
 		public ServerInfo serverInfo=new ServerInfo();
 		public LoginResponce(){
-			for(Map.Entry<String,Profile> entry:CustomSkinServer.profiles.entrySet()){
+			for(Map.Entry<String,Profile> entry:CustomSkinServer.profileManager.profiles.entrySet()){
 				profiles.add(entry.getValue());
 			}
 		}
